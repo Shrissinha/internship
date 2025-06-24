@@ -1,0 +1,64 @@
+#include <stdio.h>
+#include <stdlib.h>
+
+void create_and_write(const char *fname) {
+    FILE *f = fopen(fname, "w");
+    if (!f) {
+        perror("fopen for write");
+        return;
+    }
+    fprintf(f, "Line 1: Hello, file!\n");
+    fprintf(f, "Line 2: Writing from C.\n");
+    fclose(f);
+    puts("✔ Successfully created & wrote to file.");
+}
+
+void append_to_file(const char *fname) {
+    FILE *f = fopen(fname, "a");
+    if (!f) {
+        perror("fopen for append");
+        return;
+    }
+    fprintf(f, "Appended line at end.\n");
+    fclose(f);
+    puts("✔ Successfully appended to file.");
+}
+
+void read_file(const char *fname) {
+    FILE *f = fopen(fname, "r");
+    if (!f) {
+        perror("fopen for read");
+        return;
+    }
+    int c;
+    puts("\n--- File Content Start ---");
+    while ((c = fgetc(f)) != EOF) {
+        putchar(c);
+    }
+    puts("--- File Content End ---");
+    fclose(f);
+}
+
+int main(void) {
+    const char *filename = "example.txt";
+    int choice;
+
+    while (1) {
+        puts("\n1. Create & Write\n2. Append\n3. Read\n4. Exit");
+        printf("Choose: ");
+        if (scanf("%d", &choice) != 1) {
+            while (getchar() != '\n');  // flush bad input
+            puts("Please enter a number.");
+            continue;
+        }
+
+        switch (choice) {
+            case 1: create_and_write(filename); break;
+            case 2: append_to_file(filename);  break;
+            case 3: read_file(filename);       break;
+            case 4: puts("Exiting."); return 0;
+            default: puts("Invalid choice.");  break;
+        }
+    }
+    return 0;
+}
